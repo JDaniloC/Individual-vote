@@ -118,8 +118,13 @@ div.profile img {
     margin-bottom: .5em;
 }
 .participants span.agree {
-    background-color: rgb(28, 197, 28);
+    background-color: #AAE935;
 }
 .participants span.disagree {
-    background-color: rgb(230, 42, 42);
+    background-color: #FF6B6B;
+}
+
+.hr {
+    width: 100%;
+    border-top: 1px solid #DDD;
 }

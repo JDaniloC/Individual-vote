@@ -1,15 +1,40 @@
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 import styles from '../styles/components/VotePanel.module.css';
 
+let countdownTimeout: NodeJS.Timeout;
+
 export default function VotePanel() {
+    const [time, setTime] = useState(60);
+    const [isActive, setIsActive] = useState(true);
+
+    useEffect(() => {
+        if (time > 0) {
+            countdownTimeout = setTimeout(() => {
+                setTime(time - 1);
+            }, 1000)
+        } else {
+            setIsActive(false);
+        }
+        // clearTimeout(countdownTimeout)
+    }, [time])
+
     function handleVote() {
         axios.post('/api/vote', { 
             email: 'jdsc@cin.ufpe.br',
-            password: "Danilo123"
+            password: ""
         }).then((data) => {
             console.log(data);
         })
     }
+
+    function leftPad(number: number) {
+        return ("00" + number).slice(-2)
+    }
+
+    const hour = leftPad(Math.floor(time / 3600))
+    const minutes = leftPad(Math.floor((time % 3600) / 60))
+    const seconds = leftPad(Math.floor(((time % 3600) % 60)))
 
     return (
         <div className = {styles.voteContainer}>
@@ -19,12 +44,14 @@ export default function VotePanel() {
                 </h1>
                 <img className = {styles.flag}  src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/PT_%28Brazil%29_logo.svg/1200px-PT_%28Brazil%29_logo.svg.png"/>    
             </header>
+            <hr className = {styles.hr}/>
             <section className = {styles.timing}>
                 <div className = {styles.profile} >
-                    <img src="https://www.camara.leg.br/imgproxy/qultjITRBjGmq0sdq6nQa_wdhgDJCgDjz1tzqcmqHp0/fill/750/500/no/1/aHR0cDovL3d3dy5jYW1hcmEubGVnLmJyL2ludGVybmV0L2JhbmNvaW1hZ2VtL2JhbmNvLzIwMTcvMTAvaW1nMjAxNzEwMjYxNDUyMzc1MzU1NzQ4LmpwZw.jpg"/> 
+                    <img src="/profile.jpg"/> 
                 </div>
-                <span> 00:06:21 </span>
+                <span> {hour}:{minutes}:{seconds} </span>
             </section>
+            <hr className = {styles.hr}/>
             <main>
                 <div className = {styles.infos}>
                     <h1>
@@ -32,11 +59,11 @@ export default function VotePanel() {
                     </h1>
                     <div>
                         <span>
-                            <img src="https://www.flaticon.com/svg/vstatic/svg/633/633991.svg?token=exp=1614827936~hmac=417c0f4e62ad5b575ddcf07fbeaca11f"/>
+                            <img src="/like.svg"/>
                             <p> 4 </p>
                         </span>
                         <span className = {styles.red}>
-                            <img src="https://www.flaticon.com/svg/vstatic/svg/633/633990.svg?token=exp=1614828047~hmac=18104d73022e58e4d63724f06591e257"/>
+                            <img src="/dislike.svg"/>
                             <p> 0 </p>
                         </span>
                     </div>
@@ -55,7 +82,7 @@ export default function VotePanel() {
                 <div className = {styles.participants}>
                     <span className = {styles.disagree}>
                         <div className = {styles.profile}>
-                            <img src="https://www.camara.leg.br/imgproxy/qultjITRBjGmq0sdq6nQa_wdhgDJCgDjz1tzqcmqHp0/fill/750/500/no/1/aHR0cDovL3d3dy5jYW1hcmEubGVnLmJyL2ludGVybmV0L2JhbmNvaW1hZ2VtL2JhbmNvLzIwMTcvMTAvaW1nMjAxNzEwMjYxNDUyMzc1MzU1NzQ4LmpwZw.jpg"/>
+                            <img src="/profile.jpg"/>
                         </div>
                         <div>
                             <p> Julio Gupermann </p>
@@ -64,7 +91,7 @@ export default function VotePanel() {
                     </span>
                     <span>
                         <div className = {styles.profile}>
-                            <img src="https://www.camara.leg.br/imgproxy/qultjITRBjGmq0sdq6nQa_wdhgDJCgDjz1tzqcmqHp0/fill/750/500/no/1/aHR0cDovL3d3dy5jYW1hcmEubGVnLmJyL2ludGVybmV0L2JhbmNvaW1hZ2VtL2JhbmNvLzIwMTcvMTAvaW1nMjAxNzEwMjYxNDUyMzc1MzU1NzQ4LmpwZw.jpg"/>
+                            <img src="/profile.jpg"/>
                         </div>
                         <div>
                             <p> Julio Gupermann </p>
@@ -73,7 +100,7 @@ export default function VotePanel() {
                     </span>
                     <span className = {styles.agree}>
                         <div className = {styles.profile}>
-                            <img src="https://www.camara.leg.br/imgproxy/qultjITRBjGmq0sdq6nQa_wdhgDJCgDjz1tzqcmqHp0/fill/750/500/no/1/aHR0cDovL3d3dy5jYW1hcmEubGVnLmJyL2ludGVybmV0L2JhbmNvaW1hZ2VtL2JhbmNvLzIwMTcvMTAvaW1nMjAxNzEwMjYxNDUyMzc1MzU1NzQ4LmpwZw.jpg"/>
+                            <img src="/profile.jpg"/>
                         </div>
                         <div>
                             <p> Julio Gupermann </p>
@@ -82,7 +109,7 @@ export default function VotePanel() {
                     </span>
                     <span>
                         <div className = {styles.profile}>
-                            <img src="https://www.camara.leg.br/imgproxy/qultjITRBjGmq0sdq6nQa_wdhgDJCgDjz1tzqcmqHp0/fill/750/500/no/1/aHR0cDovL3d3dy5jYW1hcmEubGVnLmJyL2ludGVybmV0L2JhbmNvaW1hZ2VtL2JhbmNvLzIwMTcvMTAvaW1nMjAxNzEwMjYxNDUyMzc1MzU1NzQ4LmpwZw.jpg"/>
+                            <img src="/profile.jpg"/>
                         </div>
                         <div>
                             <p> Julio Gupermann </p>
